@@ -160,17 +160,17 @@ def task5_mean_std(N=1000, m=10):
 # Run main if this script is executed
 # ================================
 if __name__ == "__main__":
-    # print("Task 1: Plot PDFs")
-    # task1_plot_pdfs()
+    print("Task 1: Plot PDFs")
+    task1_plot_pdfs()
     
-    # print("Task 2: Raw Sampling Histograms")
-    # task2_histograms()
+    print("Task 2: Raw Sampling Histograms")
+    task2_histograms()
     
-    # print("Task 3: Averaging Effect")
-    # task3_averaging()
+    print("Task 3: Averaging Effect")
+    task3_averaging()
     
-    # print("Task 4: Variance Scaling")
-    # task4_variance_scaling()
+    print("Task 4: Variance Scaling")
+    task4_variance_scaling()
     
     print("Task 5: Mean vs Standard Deviation")
     task5_mean_std()
