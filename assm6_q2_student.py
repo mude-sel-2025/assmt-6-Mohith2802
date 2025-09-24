@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.stats import norm
 
-def confidence_interval(N_samples=100, sample_size=30, true_mean=67, true_std=10, confidence=0.95):
+def confidence_interval(N_samples=40, sample_size=50, true_mean=63, true_std=np.sqrt(0.15*63), confidence=0.95):
     """
     Demonstrates 95% confidence intervals for the mean.
     Parameters:
@@ -15,8 +15,8 @@ def confidence_interval(N_samples=100, sample_size=30, true_mean=67, true_std=10
     
     # WRITE_YOUR_CODE HERE TO COMPUTE THE Z VALUE
     # Z value for the two-tailed confidence interval
-    alpha = 
-    z = 
+    alpha = (1-confidence)/2
+    z = norm.ppf(1 - alpha)
     # this code block ends here
 
     # Store the lower and upper bounds of each CI
@@ -31,11 +31,11 @@ def confidence_interval(N_samples=100, sample_size=30, true_mean=67, true_std=10
         sample = np.random.normal(loc=true_mean, scale=true_std, size=sample_size)
 
         # WRITE_YOUR_CODE HERE TO COMPUTE SAMPLE MEAN, SAMPLE STANDARD ERROR, AND CI BOUNDS
-        sample_mean = 
-        sample_se = 
+        sample_mean = np.mean(sample)
+        sample_se = np.std(sample, ddof=1) / np.sqrt(sample_size)
         
-        lower = 
-        upper = 
+        lower = sample_mean - z * sample_se
+        upper = sample_mean + z * sample_se
         # this code block ends here
 
         # append to CI lists        
@@ -43,7 +43,7 @@ def confidence_interval(N_samples=100, sample_size=30, true_mean=67, true_std=10
         ci_uppers.append(upper)
         
         # WRITE_YOUR_CODE HERE TO CHECK IF THE TRUE MEAN IS WITHIN THE CI, INCREMENT misses IF NOT
-        if 
+        if true_mean< lower or true_mean > upper:
             misses += 1
         # this code block ends here
     
@@ -52,7 +52,7 @@ def confidence_interval(N_samples=100, sample_size=30, true_mean=67, true_std=10
     for i, (low, up) in enumerate(zip(ci_lowers, ci_uppers)):
 
         # WRITE_YOUR_CODE HERE TO cOLOR THE INTERVALS THAT MISS THE TRUE MEAN IN RED, OTHERS IN BLUE
-        color = 
+        color = 'red' if (low > true_mean or up < true_mean) else 'blue'
         # this code block ends here
 
         plt.plot([low, up], [i, i], color=color, lw=2)
@@ -61,14 +61,14 @@ def confidence_interval(N_samples=100, sample_size=30, true_mean=67, true_std=10
     plt.axvline(true_mean, color='magenta', linestyle='-', label='True Mean', lw=3)
     plt.xlabel("Value")
     plt.ylabel("Sample #")
-    plt.title(f"{confidence*100:.0f}% Confidence Intervals for Sample Means\nMissed intervals: {misses}/{N_samples}")
+    plt.title(f"For Sample size of {sample_size}\n{confidence*100:.0f}% Confidence Intervals for Sample Means\nMissed intervals: {misses}/{N_samples}")
     plt.legend()
     plt.grid(True)
     plt.show()
     
     # WRITE_YOUR_CODE HERE TO PRINT THE NUMBER OF MISSES AND THE PERCENTAGE
-    print(f"Out of {} intervals, {} did NOT contain the true mean.")
-    print(f"This is roughly {}%, close to the expected 5% for a 95% CI.")
+    print(f"Out of {N_samples} intervals, {misses} did NOT contain the true mean.")
+    print(f"This is roughly {misses*100/N_samples}%, close to the expected 5% for a 95% CI.")
     # this code block ends here
 
 # ================================
@@ -78,3 +78,6 @@ if __name__ == "__main__":
     confidence_interval()
 
     plt.show() # do not comment this out
+
+# If we increase the sample size from 50 to 100 to 1000, we get less number of misses, as the sample mean is a better estimate of the original sample space.
+# If we increase the range of confidence interval from 95% to 99% for same sample size, we get less number of misses, as the range of confidence interval is larger and more likely to contain the true mean.
